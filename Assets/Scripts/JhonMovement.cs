@@ -14,6 +14,7 @@ public class JhonMovement : MonoBehaviour
     private float Horizontal;
     private bool Grounded;
     private float LastShoot;
+    private int Health = 5;
    
     void Start()
     {
@@ -35,7 +36,7 @@ public class JhonMovement : MonoBehaviour
             Grounded = true;
         } else Grounded = false;
         
-        if(Input.GetKeyDown(KeyCode.W)){
+        if(Input.GetKeyDown(KeyCode.W)&& Grounded){
             Jump();
         }
         if (Input.GetKey(KeyCode.Space) && Time.time > LastShoot + 0.25f)
@@ -51,20 +52,22 @@ public class JhonMovement : MonoBehaviour
     private void Shoot()
     {
         Vector3 direction;
-        if (transform.localScale.x == 1.0f)
-        {
-            direction = Vector2.right;
-        }
-        else
-        {
-            direction = Vector2.left;
-        }
+        if (transform.localScale.x == 1.0f) direction = Vector3.right;
+        else direction = Vector3.left;
 
-        
         GameObject bullet = Instantiate(BulletPrefab, transform.position + direction * 0.1f, Quaternion.identity);
         bullet.GetComponent<BulletScript>().SetDirection(direction);
     }
     private void FixedUpdate(){
         Rigidbody2D.velocity = new Vector2(Horizontal, Rigidbody2D.velocity.y);
     }
+    public void Hit()
+    {
+
+    
+        Health = Health -1;
+        if(Health == 0) Destroy(gameObject);
+    }
+
+    
 }
