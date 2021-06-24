@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class JhonMovement : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -12,14 +13,16 @@ public class JhonMovement : MonoBehaviour
     private Animator Animator;
 
     private float Horizontal;
+    
     private bool Grounded;
     private float LastShoot;
-    private int Health = 5;
+    private int Health = 20;
    
     void Start()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
+        Animator.SetBool("morir", false);
     }
 
     // Update is called once per frame
@@ -69,5 +72,20 @@ public class JhonMovement : MonoBehaviour
         if(Health == 0) Destroy(gameObject);
     }
 
-    
+    void OnCollisionEnter2D(Collision2D obj)
+    {
+            
+            if (obj.collider.tag == "Finish") {
+            Animator.SetBool("morir", true);
+
+            System.Threading.Thread.Sleep(500);
+            GetComponent<Transform>().position = GameObject.FindGameObjectWithTag("Respawn").GetComponent<Transform>().position;
+            Animator.SetBool("morir", false);        
+        }
+
+
+    }
+ 
+
+
 }
